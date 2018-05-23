@@ -73,6 +73,22 @@ describe("Person", () => {
             expect(teacher.klasses[0]).to.equal(klasses[0]);
             expect(teacher.klasses[1]).to.equal(klasses[1]);
         });
+        
+       describe("#isTeaching", () => {
+            it("判断学生在不在老师教的班级里，这个是真的", () => {
+                const teacher = new Teacher(1, "Tom", 21, klasses);
+                const student = new Student(2,"Jerry",11,new Class(3))
+                const isTeaching = teacher.isTeaching(student);
+                expect(isTeaching).to.equal(true);
+            });
+
+            it("判断学生在不在老师教的班级里，这个是假的", () => {
+                const teacher = new Teacher(1, "Tom", 21,klasses);
+                const student = new Student(2,"Jerry",11,new Class(1))
+                const isTeaching = teacher.isTeaching(student);
+                expect(isTeaching).to.equal(false);
+            });
+        });
 
         describe("#introduce", () => {
             it("should overwrite Person introduce, introduce with name, age and class number, given teacher have class", () => {
@@ -150,6 +166,7 @@ describe("Class", () => {
             const otherKlass = new Class(3);
             const student = new Student(1, "Jerry", 21, klass);
             const teacher = new Teacher(1, "Tom", 21, [klass, otherKlass]);
+            
             klass.registerAssignLeaderListener(teacher);
 
             klass.assignLeader(student);
@@ -164,7 +181,7 @@ describe("Class", () => {
             const otherKlass = new Class(3);
 
             const student = new Student(1, "Jerry", 21, otherKlass);
-
+           
             expect(student.klass).to.equal(otherKlass);
 
             klass.appendMember(student);
@@ -178,10 +195,12 @@ describe("Class", () => {
             const teacher = new Teacher(1, "Tom", 21, [klass, otherKlass]);
 
             const student = new Student(1, "Jerry", 21, otherKlass);
+            
+            
             klass.registerJoinListener(teacher);
 
             klass.appendMember(student);
-
+ 
             expect(spy.calledWith("I am Tom. I know Jerry has joined Class 2.")).to.be.ok;
         });
     });
